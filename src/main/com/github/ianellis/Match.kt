@@ -1,17 +1,15 @@
 package com.github.ianellis
 
 class Match(
-    private val player1: Player,
-    private val player2: Player,
-    private val sets: List<Set>
+    private val set:Game
 ) {
 
     fun pointWonBy(player: Player) {
-
+        set.pointWonBy(player)
     }
 
     fun score(): String {
-        return ""
+        return set.score()
     }
 }
 
