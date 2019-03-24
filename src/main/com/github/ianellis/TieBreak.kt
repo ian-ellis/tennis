@@ -5,18 +5,75 @@ class TieBreak(
     private val player2: Player
 ) : Game {
 
-    override fun start() {
+    companion object {
+        private const val MIN_POINTS_TO_WIN = 7
+        private const val WIN_MARGIN = 2
+    }
 
+    private var player1Points: Int = 0
+    private var player2Points: Int = 0
+
+    private var state: GameState = GameState.NotStarted
+
+    override fun start() {
+        if (state == GameState.NotStarted) {
+            updateState()
+            state = GameState.Started(score())
+        }
     }
 
     override fun state(): GameState {
-        return GameState.NotStarted
+        return state
     }
 
     override fun pointWonBy(player: Player) {
+        startGameIfNotStarted()
+        if (state !is GameState.Complete) {
+            updatePointsFor(player)
+            updateState()
+        }
     }
 
     override fun score(): String {
-        return ""
+        return state.let {
+            when (it) {
+                is GameState.Started -> it.score
+                else -> ""
+            }
+        }
+    }
+
+    private fun startGameIfNotStarted() {
+        if (state == GameState.NotStarted) {
+            start()
+        }
+    }
+
+    private fun updatePointsFor(player: Player) {
+        if (player == player1) {
+            player1Points++
+        } else {
+            player2Points++
+        }
+    }
+
+    private fun updateState() {
+
+        state = winner()?.let {
+            GameState.Complete(it)
+        } ?: kotlin.run {
+
+            val score = "$player1Points-$player2Points"
+            GameState.Started(score)
+
+        }
+    }
+
+    private fun winner(): Player? {
+        return when {
+            player1Points >= MIN_POINTS_TO_WIN && (player1Points >= player2Points + WIN_MARGIN) -> player1
+            player2Points >= MIN_POINTS_TO_WIN && (player2Points >= player1Points + WIN_MARGIN) -> player2
+            else -> null
+        }
     }
 }
