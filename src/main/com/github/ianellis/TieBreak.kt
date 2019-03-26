@@ -27,7 +27,6 @@ class TieBreak(
     }
 
     override fun pointWonBy(player: Player) {
-        startGameIfNotStarted()
         if (state !is GameState.Complete) {
             updatePointsFor(player)
             updateState()
@@ -40,12 +39,6 @@ class TieBreak(
                 is GameState.Started -> it.score
                 else -> ""
             }
-        }
-    }
-
-    private fun startGameIfNotStarted() {
-        if (state == GameState.NotStarted) {
-            start()
         }
     }
 

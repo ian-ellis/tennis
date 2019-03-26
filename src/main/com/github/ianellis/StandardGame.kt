@@ -28,7 +28,6 @@ class StandardGame(
     override fun state(): GameState = state
 
     override fun pointWonBy(player: Player) {
-        startGameIfNotStarted()
         if (state !is GameState.Complete) {
             updatePointsFor(player)
             updateState()
@@ -42,12 +41,6 @@ class StandardGame(
                 is GameState.NotStarted -> ""
                 else -> ""
             }
-        }
-    }
-
-    private fun startGameIfNotStarted() {
-        if (state == GameState.NotStarted) {
-            start()
         }
     }
 
