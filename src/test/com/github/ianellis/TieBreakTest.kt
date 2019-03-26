@@ -1,5 +1,6 @@
 package com.github.ianellis
 
+import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -49,6 +50,12 @@ class TieBreakTest {
         player1.`wins n points`(5)
         player2.`wins n points`(7)
         assertEquals(GameState.Complete(player2), game.state())
+    }
+
+    @Test
+    fun `state() - returns Started after a call to start()`() {
+        game.start()
+        assertEquals(GameState.Started("0-0"), game.state())
     }
 
     @Test
