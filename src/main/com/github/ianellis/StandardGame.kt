@@ -21,7 +21,6 @@ class StandardGame(
     override fun start() {
         if (state == GameState.NotStarted) {
             updateState()
-            state = GameState.Started(score())
         }
     }
 
