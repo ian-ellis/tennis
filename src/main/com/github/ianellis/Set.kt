@@ -30,7 +30,7 @@ class Set(
             currentGame.pointWonBy(player)
             val currentGameState = currentGame.state()
             if (currentGameState is GameState.Complete) {
-                currentGame.wonBy(currentGameState.winner)
+                currentGameWonBy(currentGameState.winner)
             }
             updateState()
         }
@@ -46,7 +46,7 @@ class Set(
         }
     }
 
-    private fun Game.wonBy(winner: Player) {
+    private fun currentGameWonBy(winner: Player) {
         when (winner) {
             player1 -> player1Games ++
             player2 -> player2Games ++
