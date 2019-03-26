@@ -39,7 +39,7 @@ class StandardGame(
             when (it) {
                 is GameState.Started -> it.score
                 is GameState.NotStarted -> ""
-                else -> ""
+                is GameState.Complete -> ""
             }
         }
     }

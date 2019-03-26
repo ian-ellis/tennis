@@ -37,7 +37,8 @@ class TieBreak(
         return state.let {
             when (it) {
                 is GameState.Started -> it.score
-                else -> ""
+                is GameState.NotStarted -> ""
+                is GameState.Complete -> ""
             }
         }
     }
