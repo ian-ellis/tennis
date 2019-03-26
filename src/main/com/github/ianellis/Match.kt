@@ -2,13 +2,21 @@ package com.github.ianellis
 
 class Match(
     private val set:Game
-) {
+) : Game {
+    
+    override fun start() {
+        set.start()
+    }
 
-    fun pointWonBy(player: Player) {
+    override fun state(): GameState {
+        return set.state()
+    }
+
+    override fun pointWonBy(player: Player) {
         set.pointWonBy(player)
     }
 
-    fun score(): String {
+    override fun score(): String {
         return set.score()
     }
 }
