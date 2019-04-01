@@ -18,6 +18,7 @@ class MatchTest {
     fun `pointWonBy() - invokes set pointsWonByMethod on set`() {
         var pointsWonByCaptureValue: Player? = null
         val set = object : Game {
+            override fun onGameComplete(listener: (GameState.Complete) -> Unit) {}
             override fun start() {}
             override fun pointWonBy(player: Player) {
                 pointsWonByCaptureValue = player
@@ -35,6 +36,7 @@ class MatchTest {
 
     private fun gameWith(score: String): Game {
         return object : Game {
+            override fun onGameComplete(listener: (GameState.Complete) -> Unit) {}
             override fun start() {}
             override fun pointWonBy(player: Player) {}
             override fun score(): String = score

@@ -3,7 +3,10 @@ package com.github.ianellis
 class Match(
     private val set:Game
 ) : Game {
-    
+    override fun onGameComplete(listener: (GameState.Complete) -> Unit) {
+
+    }
+
     override fun start() {
         set.start()
     }

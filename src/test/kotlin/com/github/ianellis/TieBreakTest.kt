@@ -1,6 +1,5 @@
 package com.github.ianellis
 
-import junit.framework.Assert
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -85,6 +84,24 @@ class TieBreakTest {
 
         player1.`wins n points`(1)
         assertEquals(GameState.Complete(player1), game.state())
+    }
+
+    @Test
+    fun `onGameComplete() - gets called with the complete state when game is won`(){
+
+        var updatedState: GameState.Complete? = null
+        val listener: (GameState.Complete) -> Unit = {
+            updatedState = it
+        }
+
+        game.onGameComplete(listener)
+        `given the game is won by`(player1)
+
+        assertEquals(GameState.Complete(player1), updatedState)
+    }
+
+    private fun `given the game is won by`(player:Player){
+        player.`wins n points`(7)
     }
 
     private fun Player.`wins n points`(n: Int) {

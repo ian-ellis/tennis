@@ -1,9 +1,10 @@
 package com.github.ianellis
 
-import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertSame
+
 
 class StandardGameTest {
     companion object {
@@ -139,6 +140,24 @@ class StandardGameTest {
         player1.`wins n points`(2)
         //then player 1 wins the game
         assertEquals(GameState.Complete(winner = player1), game.state())
+    }
+
+    @Test
+    fun `onGameComplete() - gets called with the complete state when game is won`(){
+
+        var updatedState: GameState.Complete? = null
+        val listener: (GameState.Complete) -> Unit = {
+            updatedState = it
+        }
+
+        game.onGameComplete(listener)
+        `given the game is won by`(player1)
+
+        assertEquals(GameState.Complete(player1), updatedState)
+    }
+
+    private fun `given the game is won by`(player:Player){
+        player.`wins n points`(4)
     }
 
     private fun `given the game is deuce`() {

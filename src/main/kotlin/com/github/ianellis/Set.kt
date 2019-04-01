@@ -4,6 +4,9 @@ class Set(
     private val player1: Player,
     private val player2: Player
 ) : Game {
+    override fun onGameComplete(listener: (GameState.Complete) -> Unit) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     companion object {
         private const val MIN_GAMES_TO_WIN = 6

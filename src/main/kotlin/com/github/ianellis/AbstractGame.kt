@@ -1,5 +1,7 @@
 package com.github.ianellis
 
+import java.lang.ref.WeakReference
+
 abstract class AbstractGame(
     private val player1: Player,
     private val player2: Player,
@@ -14,6 +16,7 @@ abstract class AbstractGame(
     protected var player2Points: Int = 0
 
     private var state: GameState = GameState.NotStarted
+    private var completeListeners: MutableList<WeakReference<(GameState.Complete) -> Unit>> = mutableListOf()
 
     override fun start() {
         if (state == GameState.NotStarted) {
@@ -40,6 +43,16 @@ abstract class AbstractGame(
         }
     }
 
+    override fun onGameComplete(listener: (GameState.Complete) -> Unit) {
+        purgeExpiredReferences()
+        val currentState = state
+        if (currentState is GameState.Complete) {
+            listener(currentState)
+        } else {
+            completeListeners.add(WeakReference(listener))
+        }
+    }
+
     private fun updatePointsFor(player: Player) {
         if (player == player1) {
             player1Points++
@@ -50,7 +63,12 @@ abstract class AbstractGame(
 
     private fun updateState() {
         state = winner()?.let {
-            GameState.Complete(it)
+            purgeExpiredReferences()
+            val complete = GameState.Complete(it)
+            completeListeners.forEach { listenerReference ->
+                listenerReference.get()?.invoke(complete)
+            }
+            complete
         } ?: kotlin.run {
             GameState.Started(describeScore())
         }
@@ -64,5 +82,11 @@ abstract class AbstractGame(
             player2Points >= minPointsToWin && (player2Points >= player1Points + MIN_WINNING_MARGIN) -> player2
             else -> null
         }
+    }
+
+    private fun purgeExpiredReferences() {
+        completeListeners = completeListeners.filter {
+            it.get() != null
+        }.toMutableList()
     }
 }
